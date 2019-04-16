@@ -97,6 +97,17 @@ BOOST_AUTO_TEST_CASE(_)
 		};
 		BOOST_CHECK_EQUAL(FindMax(dominos), "333446666664400660055111100222");
 	}
+
+	{
+		std::vector<Dice> dominos = {
+			{0, 0},
+			{0, 0},
+			{0, 0},
+			{0, 0},
+			{0, 0},
+		};
+		BOOST_CHECK_EQUAL(FindMax(dominos), "0");
+	}
 }
 
 BOOST_AUTO_TEST_SUITE_END()

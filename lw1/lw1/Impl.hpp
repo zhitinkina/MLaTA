@@ -17,13 +17,13 @@ struct Dice
 	bool isProcessed = false;
 };
 
-std::string FindMax(std::vector<Dice> & dominos, std::optional<int> last);
+std::string FindMaxImpl(std::vector<Dice> & dominos, std::optional<int> last);
 
 void ProcessDiceImpl(std::vector<Dice> & dominos, const int & first, const int & second, bool & isProcessed, std::string & result) {
 	auto tmp = std::to_string(first) + std::to_string(second);
 
 	isProcessed = true;
-	tmp += FindMax(dominos, second);
+	tmp += FindMaxImpl(dominos, second);
 	isProcessed = false;
 
 	if (result.size() == tmp.size() ? result < tmp : result.size() < tmp.size())
@@ -40,7 +40,7 @@ void ProcessDice(std::vector<Dice> & dominos, const int & first, const int & sec
 	}
 }
 
-std::string FindMax(std::vector<Dice> & dominos, std::optional<int> last = std::nullopt)
+std::string FindMaxImpl(std::vector<Dice> & dominos, std::optional<int> last = std::nullopt)
 {
 	std::string result;
 	for (auto & dice : dominos)
@@ -48,5 +48,26 @@ std::string FindMax(std::vector<Dice> & dominos, std::optional<int> last = std::
 		ProcessDice(dominos, dice.first, dice.second, dice.isProcessed, result, last);
 		ProcessDice(dominos, dice.second, dice.first, dice.isProcessed, result, last);
 	}
+	
 	return result;
+}
+
+std::string FindMax(std::vector<Dice> & dominos, std::optional<int> last = std::nullopt)
+{
+	return [](const std::string & str) {
+		std::string result;
+		result.reserve(str.size());
+		bool needProcessZero = false;
+
+		for (auto ch : str)
+		{
+			if (ch == '0' && !needProcessZero)
+			{
+				continue;
+			}
+			needProcessZero = true;
+			result += ch;
+		}
+		return result.empty() ? "0" : result;
+	}(FindMaxImpl(dominos, last));
 }

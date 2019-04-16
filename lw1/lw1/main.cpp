@@ -13,6 +13,16 @@
 #include "Impl.hpp"
 
 #include <iostream>
+#include <chrono>
+
+template <class T>
+auto MeasureTime(T && fn)
+{
+	const auto begin = std::chrono::high_resolution_clock::now();
+	fn();
+	const auto end = std::chrono::high_resolution_clock::now();
+	return (end - begin);
+}
 
 std::vector<Dice> ReadDominos(const std::string & fileName)
 {
@@ -44,7 +54,15 @@ int main()
 		}
 
 		auto dominos = ReadDominos("input.txt");
-		outputFile << FindMax(dominos);
+		std::string max;
+		const auto time = MeasureTime([&dominos, &max]() {
+			max = std::move(FindMax(dominos));
+		});
+
+		std::cerr << "runtime = "
+			<< std::chrono::duration_cast<std::chrono::milliseconds>(time).count()
+			<< " ms" << std::endl;
+		outputFile << max << std::endl;
 	}
 	catch (const std::exception & ex)
 	{
