@@ -10,8 +10,7 @@ struct Dice
 		,second(second)
 	{}
 
-	Dice() {}
-
+	Dice() = default;
 	int first = 0;
 	int second = 0;
 	bool isProcessed = false;
