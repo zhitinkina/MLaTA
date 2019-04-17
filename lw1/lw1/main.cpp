@@ -29,8 +29,7 @@ std::vector<Dice> ReadDominos(const std::string & fileName)
 	std::ifstream inputFile(fileName);
 	if (!inputFile.is_open())
 	{
-		std::string exception = "File was not opened";
-		std::cout << exception;
+		throw std::exception("File was not opened");
 	}
 
 	int diceNumber = 0;
@@ -44,19 +43,9 @@ std::vector<Dice> ReadDominos(const std::string & fileName)
 	return dominos;
 }
 
-template <class T>
-auto MeasureTime(T && fn)
-{
-	auto begin = std::chrono::high_resolution_clock::now();
-	fn();
-	auto end = std::chrono::high_resolution_clock::now();
-	return (end - begin);
-}
-
 int main()
 {
-	std::ofstream outputFile("output.txt");
-	if (!outputFile.is_open())
+	try
 	{
 		std::ofstream outputFile("output.txt");
 		if (!outputFile.is_open())
@@ -79,18 +68,4 @@ int main()
 	{
 		std::cerr << ex.what() << std::endl;
 	}
-
-	auto dominos = ReadDominos("input.txt");
-	
-	std::string result;
-	auto time = MeasureTime([&result, &dominos]() {
-		result = FindMax(dominos);
-	});
-	std::cerr << "runtime = "
-		<< std::chrono::duration_cast<std::chrono::milliseconds>(time).count()
-		<< " ms" << std::endl;
-
-	outputFile << result;
-	
-	return 0;
 }
