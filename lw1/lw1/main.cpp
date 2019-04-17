@@ -32,7 +32,7 @@ std::vector<Dice> ReadDominos(const std::string & fileName)
 		throw std::exception("File was not opened");
 	}
 
-	int diceNumber = 0;
+	size_t diceNumber = 0;
 	inputFile >> diceNumber;
 
 	std::vector<Dice> dominos(diceNumber);
